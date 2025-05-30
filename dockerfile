@@ -1,14 +1,13 @@
-# Etapa de construcción
-FROM node:18-alpine AS builder
+# Etapa 1: construir la aplicación
+FROM node:18 AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install && npm install react-router-dom
+RUN npm install
 COPY . .
 RUN npm run build
 
-# Etapa de producción (para los contenedores React)
-FROM node:18-alpine
-WORKDIR /app
-COPY --from=builder /app .
-EXPOSE 3000
-CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "3000"]
+# Etapa 2: servir la aplicación con NGINX
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
