@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class VentasService {
-  API_URL = 'http://34.171.9.69:8089';
+  API_URL = 'https://ventas1-475449541622.us-central1.run.app';
 
   async registrarVenta(venta) {
     try {
